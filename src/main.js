@@ -82,7 +82,6 @@ class SoftRipple {
 		const rippleColor =
 			this.rippleProps.randomColor != true ? this.rippleProps.rippleColor : getRandomHex();
 
-		console.log(rippleColor);
 		return `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" id="ripple-svg"> <filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="4" /></filter><filter id="shadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="7" dy="3" stdDeviation="2" flood-color="${lightenColor(
 			rippleColor,
 			-40

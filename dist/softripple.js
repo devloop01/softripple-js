@@ -173,7 +173,6 @@ var SoftRipple = function () {
 			var rippleWidth = this.rippleProps.randomSize != true ? this.rippleProps.rippleWidth : (0, _utils.getRandomIntFromRange)(this.rippleWidthMin, this.rippleWidthMax);
 			var rippleColor = this.rippleProps.randomColor != true ? this.rippleProps.rippleColor : (0, _utils.getRandomHex)();
 
-			console.log(rippleColor);
 			return "<svg viewBox=\"0 0 100 100\" xmlns=\"http://www.w3.org/2000/svg\" id=\"ripple-svg\"> <filter id=\"blur\" x=\"-50%\" y=\"-50%\" width=\"200%\" height=\"200%\"><feGaussianBlur in=\"SourceGraphic\" stdDeviation=\"4\" /></filter><filter id=\"shadow\" x=\"-50%\" y=\"-50%\" width=\"200%\" height=\"200%\"><feDropShadow dx=\"7\" dy=\"3\" stdDeviation=\"2\" flood-color=\"" + (0, _utils.lightenColor)(rippleColor, -40) + "\" flood-opacity=\"0.2\" /><feDropShadow dx=\"-2\" dy=\"-4\" stdDeviation=\"1\" flood-color=\"" + (0, _utils.lightenColor)(rippleColor, 20) + "\" flood-opacity=\"0.2\" /><feDropShadow dx=\"3\" dy=\"3\" stdDeviation=\".6\" flood-color=\"" + (0, _utils.lightenColor)(rippleColor, -10) + "\" flood-opacity=\"0.2\" /><feDropShadow dx=\"3\" dy=\"3\" stdDeviation=\".6\" flood-color=\"" + (0, _utils.lightenColor)(rippleColor, -10) + "\" flood-opacity=\"0.2\" /></filter><g filter=\"url(#shadow)\"><circle cx=\"50\" cy=\"50\" r=\"30\" fill=\"none\" stroke=\"" + rippleColor + "\" stroke-width=\"" + rippleWidth + "\" filter=\"url(#blur)\" /></g></svg>";
 		}
 	}, {
