@@ -15,7 +15,7 @@ npm install --save softripple-js
 Or load the ES module directly
 
 ```html
-<script src="https://unpkg.com/soft-ripple-js/dist/softripple.min.js"></script>
+<script src="https://unpkg.com/softripple-js/dist/softripple.min.js"></script>
 ```
 
 ## Usage
