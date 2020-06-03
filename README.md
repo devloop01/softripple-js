@@ -60,3 +60,7 @@ minimum is `50` and max is `200`.
 #### randomSize
 
 Boolean property to set random size of the ripples. Default value is `false`.
+
+#### randomColor
+
+Boolean property to set random color of the ripples. Default value is `false`.
