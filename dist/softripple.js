@@ -87,15 +87,19 @@ window["SoftRipple"] =
 /************************************************************************/
 /******/ ({
 
-/***/ "./src/main.js":
-/*!*********************!*\
-  !*** ./src/main.js ***!
-  \*********************/
+/***/ "./src/Ripple.js":
+/*!***********************!*\
+  !*** ./src/Ripple.js ***!
+  \***********************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -103,11 +107,11 @@ var _utils = __webpack_require__(/*! ./utils.js */ "./src/utils.js");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var SoftRipple = function () {
-	function SoftRipple(el) {
+var Ripple = function () {
+	function Ripple(el) {
 		var props = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-		_classCallCheck(this, SoftRipple);
+		_classCallCheck(this, Ripple);
 
 		this.el = el;
 		this.props = props;
@@ -115,7 +119,7 @@ var SoftRipple = function () {
 		this.init();
 	}
 
-	_createClass(SoftRipple, [{
+	_createClass(Ripple, [{
 		key: "init",
 		value: function init() {
 			this.elBox = this.el.getBoundingClientRect();
@@ -208,6 +212,57 @@ var SoftRipple = function () {
 		}
 	}]);
 
+	return Ripple;
+}();
+
+exports.default = Ripple;
+
+/***/ }),
+
+/***/ "./src/main.js":
+/*!*********************!*\
+  !*** ./src/main.js ***!
+  \*********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Ripple = __webpack_require__(/*! ./Ripple.js */ "./src/Ripple.js");
+
+var _Ripple2 = _interopRequireDefault(_Ripple);
+
+var _utils = __webpack_require__(/*! ./utils.js */ "./src/utils.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var SoftRipple = function () {
+	function SoftRipple(els) {
+		var props = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+		_classCallCheck(this, SoftRipple);
+
+		this.els = (0, _utils.convertToArray)(els);
+		this.props = props;
+
+		this.init();
+	}
+
+	_createClass(SoftRipple, [{
+		key: "init",
+		value: function init() {
+			for (var i = 0; i < this.els.length; i++) {
+				var el = this.els[i];
+				new _Ripple2.default(el, this.props);
+			}
+		}
+	}]);
+
 	return SoftRipple;
 }();
 
@@ -230,7 +285,11 @@ module.exports = function (el, props) {
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+exports.convertToArray = convertToArray;
 exports.lightenColor = lightenColor;
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 var clampValue = exports.clampValue = function clampValue(val, min, max) {
 	return val > max ? max : val < min ? min : val;
 };
@@ -242,6 +301,10 @@ var getRandomIntFromRange = exports.getRandomIntFromRange = function getRandomIn
 var getRandomHex = exports.getRandomHex = function getRandomHex() {
 	return "#" + Math.floor(Math.random() * 16777215).toString(16);
 };
+
+function convertToArray(input) {
+	if (NodeList.prototype.isPrototypeOf(input)) return [].concat(_toConsumableArray(input));else if (Array.isArray(input)) return input;else return [input];
+}
 
 function lightenColor(color, percent) {
 	var num = parseInt(color.replace("#", ""), 16),

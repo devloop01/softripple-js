@@ -5,6 +5,12 @@ export const getRandomIntFromRange = (min, max) =>
 
 export const getRandomHex = () => `#${Math.floor(Math.random() * 16777215).toString(16)}`;
 
+export function convertToArray(input) {
+	if (NodeList.prototype.isPrototypeOf(input)) return [...input];
+	else if (Array.isArray(input)) return input;
+	else return [input];
+}
+
 export function lightenColor(color, percent) {
 	var num = parseInt(color.replace("#", ""), 16),
 		amt = Math.round(2.55 * percent),

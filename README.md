@@ -26,6 +26,14 @@ It's pretty easy to use. Just import the package an declare SoftRipple with the 
 const rippleEffect = new SoftRipple(el);
 ```
 
+Also you can add effect to multiple elements.
+
+```javascript
+const el1 = document.getElementById("el1");
+const el2 = document.getElementById("el2");
+const rippleEffect = new SoftRipple([el1, el2]);
+```
+
 ## Configuring
 
 To customize the ripple effect you can use the following properties, and then pass them as an object as the second argument of the constructor.
