@@ -99,6 +99,8 @@ window["SoftRipple"] =
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _utils = __webpack_require__(/*! ./utils.js */ "./src/utils.js");
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var SoftRipple = function () {
@@ -118,11 +120,26 @@ var SoftRipple = function () {
 		value: function init() {
 			this.elBox = this.el.getBoundingClientRect();
 			this.ripples = [];
+
+			this.rippleSizeMin = 50;
+			this.rippleSizeMax = 200;
+			this.rippleSizeDefault = 100;
+
+			this.transitionDurationMin = 0.4;
+			this.transitionDurationMax = 2;
+			this.transitionDurationDefault = 0.8;
+
+			this.rippleWidthMin = 2;
+			this.rippleWidthMax = 10;
+			this.rippleWidthDefault = 4;
+
 			this.rippleProps = {
 				rippleColor: this.props.rippleColor || window.getComputedStyle(this.el).getPropertyValue("background-color"),
-				transitionDuration: this.clampValue(this.props.transitionDuration, 0.4, Infinity) || 0.8,
-				rippleWidth: this.clampValue(this.props.rippleWidth, 2, 8) || 4,
-				rippleMaxSize: this.clampValue(this.props.rippleMaxSize, 50, 200) || 100
+				transitionDuration: (0, _utils.clampValue)(this.props.transitionDuration, this.transitionDurationMin, this.transitionDurationMax) || this.transitionDurationDefault,
+				rippleWidth: (0, _utils.clampValue)(this.props.rippleWidth, this.rippleWidthMin, this.rippleWidthMax) || this.rippleWidthDefault,
+				rippleMaxSize: (0, _utils.clampValue)(this.props.rippleMaxSize, this.rippleSizeMin, this.rippleSizeMax) || this.rippleSizeDefault,
+				randomSize: this.props.randomSize || false,
+				randomColor: this.props.randomColor || false
 			};
 
 			this.el.style.position = "relative";
@@ -136,10 +153,13 @@ var SoftRipple = function () {
 		value: function addRipple(e) {
 			var x = e.x - this.elBox.left;
 			var y = e.y - this.elBox.top;
+			var rippleSize = (0, _utils.getRandomIntFromRange)(this.rippleSizeMin, this.rippleProps.rippleMaxSize);
 			var rippleEl = document.createElement("div");
 			rippleEl.id = "ripple";
 			rippleEl.style.left = x + "px";
 			rippleEl.style.top = y + "px";
+			rippleEl.style.width = rippleSize + "px";
+			rippleEl.style.height = rippleSize + "px";
 
 			rippleEl.innerHTML = this.returnCompleteSVG();
 
@@ -150,7 +170,11 @@ var SoftRipple = function () {
 	}, {
 		key: "returnCompleteSVG",
 		value: function returnCompleteSVG() {
-			return "<svg viewBox=\"0 0 100 100\" xmlns=\"http://www.w3.org/2000/svg\" id=\"ripple-svg\"> <filter id=\"blur\" x=\"-50%\" y=\"-50%\" width=\"200%\" height=\"200%\"><feGaussianBlur in=\"SourceGraphic\" stdDeviation=\"4\" /></filter><filter id=\"shadow\" x=\"-50%\" y=\"-50%\" width=\"200%\" height=\"200%\"><feDropShadow dx=\"7\" dy=\"3\" stdDeviation=\"2\" flood-color=\"" + this.lightenColor(this.rippleProps.rippleColor, -40) + "\" flood-opacity=\"0.2\" /><feDropShadow dx=\"-2\" dy=\"-4\" stdDeviation=\"1\" flood-color=\"" + this.lightenColor(this.rippleProps.rippleColor, 20) + "\" flood-opacity=\"0.2\" /><feDropShadow dx=\"3\" dy=\"3\" stdDeviation=\".6\" flood-color=\"" + this.lightenColor(this.rippleProps.rippleColor, -10) + "\" flood-opacity=\"0.2\" /><feDropShadow dx=\"3\" dy=\"3\" stdDeviation=\".6\" flood-color=\"" + this.lightenColor(this.rippleProps.rippleColor, -10) + "\" flood-opacity=\"0.2\" /></filter><g filter=\"url(#shadow)\"><circle cx=\"50\" cy=\"50\" r=\"30\" fill=\"none\" stroke=\"" + this.rippleProps.rippleColor + "\" stroke-width=\"" + this.rippleProps.rippleWidth + "\" filter=\"url(#blur)\" /></g></svg>";
+			var rippleWidth = this.rippleProps.randomSize != true ? this.rippleProps.rippleWidth : (0, _utils.getRandomIntFromRange)(this.rippleWidthMin, this.rippleWidthMax);
+			var rippleColor = this.rippleProps.randomColor != true ? this.rippleProps.rippleColor : (0, _utils.getRandomHex)();
+
+			console.log(rippleColor);
+			return "<svg viewBox=\"0 0 100 100\" xmlns=\"http://www.w3.org/2000/svg\" id=\"ripple-svg\"> <filter id=\"blur\" x=\"-50%\" y=\"-50%\" width=\"200%\" height=\"200%\"><feGaussianBlur in=\"SourceGraphic\" stdDeviation=\"4\" /></filter><filter id=\"shadow\" x=\"-50%\" y=\"-50%\" width=\"200%\" height=\"200%\"><feDropShadow dx=\"7\" dy=\"3\" stdDeviation=\"2\" flood-color=\"" + (0, _utils.lightenColor)(rippleColor, -40) + "\" flood-opacity=\"0.2\" /><feDropShadow dx=\"-2\" dy=\"-4\" stdDeviation=\"1\" flood-color=\"" + (0, _utils.lightenColor)(rippleColor, 20) + "\" flood-opacity=\"0.2\" /><feDropShadow dx=\"3\" dy=\"3\" stdDeviation=\".6\" flood-color=\"" + (0, _utils.lightenColor)(rippleColor, -10) + "\" flood-opacity=\"0.2\" /><feDropShadow dx=\"3\" dy=\"3\" stdDeviation=\".6\" flood-color=\"" + (0, _utils.lightenColor)(rippleColor, -10) + "\" flood-opacity=\"0.2\" /></filter><g filter=\"url(#shadow)\"><circle cx=\"50\" cy=\"50\" r=\"30\" fill=\"none\" stroke=\"" + rippleColor + "\" stroke-width=\"" + rippleWidth + "\" filter=\"url(#blur)\" /></g></svg>";
 		}
 	}, {
 		key: "removeRipple",
@@ -168,8 +192,8 @@ var SoftRipple = function () {
 		value: function addRippleStyles() {
 			this.style = document.createElement("style");
 			document.head.appendChild(this.style);
-			this.style.sheet.insertRule("\n\t\t\t#ripple { --size: " + this.rippleProps.rippleMaxSize + "px; position: absolute; transform: translate(-50%, -50%); width: var(--size); height: var(--size); border-radius: 50%; overflow: hidden; animation: scale-up " + this.rippleProps.transitionDuration + "s ease forwards;}\n\t\t");
-			this.style.sheet.insertRule("\n\t\t\t#ripple svg { width: var(--size);height: var(--size);}\n\t\t");
+			this.style.sheet.insertRule("\n\t\t\t#ripple {  position: absolute; transform: translate(-50%, -50%); width: 100%; height: 100%; border-radius: 50%; overflow: hidden; animation: scale-up " + this.rippleProps.transitionDuration + "s ease forwards;}\n\t\t");
+			this.style.sheet.insertRule("\n\t\t\t#ripple svg { width: 100%; height: 100%;}\n\t\t");
 
 			this.style.sheet.insertRule("\n\t\t\t@keyframes scale-up {\n\t\t\t\tfrom {\n\t\t\t\t\topacity: 1;\n\t\t\t\t\ttransform: translate(-50%, -50%) scale(0);\n\t\t\t\t}\n\t\t\t\tto {\n\t\t\t\t\topacity: 0;\n\t\t\t\t\ttransform: translate(-50%, -50%) scale(1);\n\t\t\t\t}\n\t\t\t}\t\t\n\t\t\t");
 		}
@@ -183,21 +207,6 @@ var SoftRipple = function () {
 				_this2.elBox = _this2.el.getBoundingClientRect();
 			});
 		}
-	}, {
-		key: "clampValue",
-		value: function clampValue(val, min, max) {
-			return val > max ? max : val < min ? min : val;
-		}
-	}, {
-		key: "lightenColor",
-		value: function lightenColor(color, percent) {
-			var num = parseInt(color.replace("#", ""), 16),
-			    amt = Math.round(2.55 * percent),
-			    R = (num >> 16) + amt,
-			    B = (num >> 8 & 0x00ff) + amt,
-			    G = (num & 0x0000ff) + amt;
-			return "#" + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 + (B < 255 ? B < 1 ? 0 : B : 255) * 0x100 + (G < 255 ? G < 1 ? 0 : G : 255)).toString(16).slice(1);
-		}
 	}]);
 
 	return SoftRipple;
@@ -206,6 +215,43 @@ var SoftRipple = function () {
 module.exports = function (el, props) {
 	return new SoftRipple(el, props);
 };
+
+/***/ }),
+
+/***/ "./src/utils.js":
+/*!**********************!*\
+  !*** ./src/utils.js ***!
+  \**********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.lightenColor = lightenColor;
+var clampValue = exports.clampValue = function clampValue(val, min, max) {
+	return val > max ? max : val < min ? min : val;
+};
+
+var getRandomIntFromRange = exports.getRandomIntFromRange = function getRandomIntFromRange(min, max) {
+	return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+var getRandomHex = exports.getRandomHex = function getRandomHex() {
+	return "#" + Math.floor(Math.random() * 16777215).toString(16);
+};
+
+function lightenColor(color, percent) {
+	var num = parseInt(color.replace("#", ""), 16),
+	    amt = Math.round(2.55 * percent),
+	    R = (num >> 16) + amt,
+	    B = (num >> 8 & 0x00ff) + amt,
+	    G = (num & 0x0000ff) + amt;
+	return "#" + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 + (B < 255 ? B < 1 ? 0 : B : 255) * 0x100 + (G < 255 ? G < 1 ? 0 : G : 255)).toString(16).slice(1);
+}
 
 /***/ })
 

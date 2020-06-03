@@ -1,5 +1,7 @@
 "use strict";
 
+import { clampValue, lightenColor, getRandomIntFromRange, getRandomHex } from "./utils.js";
+
 class SoftRipple {
 	constructor(el, props = {}) {
 		this.el = el;
@@ -11,14 +13,37 @@ class SoftRipple {
 	init() {
 		this.elBox = this.el.getBoundingClientRect();
 		this.ripples = [];
+
+		this.rippleSizeMin = 50;
+		this.rippleSizeMax = 200;
+		this.rippleSizeDefault = 100;
+
+		this.transitionDurationMin = 0.4;
+		this.transitionDurationMax = 2;
+		this.transitionDurationDefault = 0.8;
+
+		this.rippleWidthMin = 2;
+		this.rippleWidthMax = 10;
+		this.rippleWidthDefault = 4;
+
 		this.rippleProps = {
 			rippleColor:
 				this.props.rippleColor ||
 				window.getComputedStyle(this.el).getPropertyValue("background-color"),
 			transitionDuration:
-				this.clampValue(this.props.transitionDuration, 0.4, Infinity) || 0.8,
-			rippleWidth: this.clampValue(this.props.rippleWidth, 2, 8) || 4,
-			rippleMaxSize: this.clampValue(this.props.rippleMaxSize, 50, 200) || 100,
+				clampValue(
+					this.props.transitionDuration,
+					this.transitionDurationMin,
+					this.transitionDurationMax
+				) || this.transitionDurationDefault,
+			rippleWidth:
+				clampValue(this.props.rippleWidth, this.rippleWidthMin, this.rippleWidthMax) ||
+				this.rippleWidthDefault,
+			rippleMaxSize:
+				clampValue(this.props.rippleMaxSize, this.rippleSizeMin, this.rippleSizeMax) ||
+				this.rippleSizeDefault,
+			randomSize: this.props.randomSize || false,
+			randomColor: this.props.randomColor || false,
 		};
 
 		this.el.style.position = "relative";
@@ -31,10 +56,16 @@ class SoftRipple {
 	addRipple(e) {
 		const x = e.x - this.elBox.left;
 		const y = e.y - this.elBox.top;
+		const rippleSize = getRandomIntFromRange(
+			this.rippleSizeMin,
+			this.rippleProps.rippleMaxSize
+		);
 		const rippleEl = document.createElement("div");
 		rippleEl.id = "ripple";
 		rippleEl.style.left = `${x}px`;
 		rippleEl.style.top = `${y}px`;
+		rippleEl.style.width = `${rippleSize}px`;
+		rippleEl.style.height = `${rippleSize}px`;
 
 		rippleEl.innerHTML = this.returnCompleteSVG();
 
@@ -44,21 +75,27 @@ class SoftRipple {
 	}
 
 	returnCompleteSVG() {
-		return `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" id="ripple-svg"> <filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="4" /></filter><filter id="shadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="7" dy="3" stdDeviation="2" flood-color="${this.lightenColor(
-			this.rippleProps.rippleColor,
+		const rippleWidth =
+			this.rippleProps.randomSize != true
+				? this.rippleProps.rippleWidth
+				: getRandomIntFromRange(this.rippleWidthMin, this.rippleWidthMax);
+		const rippleColor =
+			this.rippleProps.randomColor != true ? this.rippleProps.rippleColor : getRandomHex();
+
+		console.log(rippleColor);
+		return `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" id="ripple-svg"> <filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="4" /></filter><filter id="shadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="7" dy="3" stdDeviation="2" flood-color="${lightenColor(
+			rippleColor,
 			-40
-		)}" flood-opacity="0.2" /><feDropShadow dx="-2" dy="-4" stdDeviation="1" flood-color="${this.lightenColor(
-			this.rippleProps.rippleColor,
+		)}" flood-opacity="0.2" /><feDropShadow dx="-2" dy="-4" stdDeviation="1" flood-color="${lightenColor(
+			rippleColor,
 			20
-		)}" flood-opacity="0.2" /><feDropShadow dx="3" dy="3" stdDeviation=".6" flood-color="${this.lightenColor(
-			this.rippleProps.rippleColor,
+		)}" flood-opacity="0.2" /><feDropShadow dx="3" dy="3" stdDeviation=".6" flood-color="${lightenColor(
+			rippleColor,
 			-10
-		)}" flood-opacity="0.2" /><feDropShadow dx="3" dy="3" stdDeviation=".6" flood-color="${this.lightenColor(
-			this.rippleProps.rippleColor,
+		)}" flood-opacity="0.2" /><feDropShadow dx="3" dy="3" stdDeviation=".6" flood-color="${lightenColor(
+			rippleColor,
 			-10
-		)}" flood-opacity="0.2" /></filter><g filter="url(#shadow)"><circle cx="50" cy="50" r="30" fill="none" stroke="${
-			this.rippleProps.rippleColor
-		}" stroke-width="${this.rippleProps.rippleWidth}" filter="url(#blur)" /></g></svg>`;
+		)}" flood-opacity="0.2" /></filter><g filter="url(#shadow)"><circle cx="50" cy="50" r="30" fill="none" stroke="${rippleColor}" stroke-width="${rippleWidth}" filter="url(#blur)" /></g></svg>`;
 	}
 
 	removeRipple(ripple, delay) {
@@ -73,10 +110,10 @@ class SoftRipple {
 		this.style = document.createElement("style");
 		document.head.appendChild(this.style);
 		this.style.sheet.insertRule(`
-			#ripple { --size: ${this.rippleProps.rippleMaxSize}px; position: absolute; transform: translate(-50%, -50%); width: var(--size); height: var(--size); border-radius: 50%; overflow: hidden; animation: scale-up ${this.rippleProps.transitionDuration}s ease forwards;}
+			#ripple {  position: absolute; transform: translate(-50%, -50%); width: 100%; height: 100%; border-radius: 50%; overflow: hidden; animation: scale-up ${this.rippleProps.transitionDuration}s ease forwards;}
 		`);
 		this.style.sheet.insertRule(`
-			#ripple svg { width: var(--size);height: var(--size);}
+			#ripple svg { width: 100%; height: 100%;}
 		`);
 
 		this.style.sheet.insertRule(
@@ -100,29 +137,6 @@ class SoftRipple {
 		window.addEventListener("resize", () => {
 			this.elBox = this.el.getBoundingClientRect();
 		});
-	}
-
-	clampValue(val, min, max) {
-		return val > max ? max : val < min ? min : val;
-	}
-
-	lightenColor(color, percent) {
-		var num = parseInt(color.replace("#", ""), 16),
-			amt = Math.round(2.55 * percent),
-			R = (num >> 16) + amt,
-			B = ((num >> 8) & 0x00ff) + amt,
-			G = (num & 0x0000ff) + amt;
-		return (
-			"#" +
-			(
-				0x1000000 +
-				(R < 255 ? (R < 1 ? 0 : R) : 255) * 0x10000 +
-				(B < 255 ? (B < 1 ? 0 : B) : 255) * 0x100 +
-				(G < 255 ? (G < 1 ? 0 : G) : 255)
-			)
-				.toString(16)
-				.slice(1)
-		);
 	}
 }
 
