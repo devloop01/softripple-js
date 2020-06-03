@@ -40,13 +40,13 @@ You can also pass in options as the second argument which needs to be an object.
 const rippleEffect = new SoftRipple(el, { options });
 ```
 
-## Configuring
+## Options
 
 To customize the ripple effect you can use the following properties, and then pass them as an object as the second argument of the constructor.
 
 #### rippleColor
 
-A String representing the color of the ripple. Defaults to the background color of the element.
+A String representing the color of the ripple. Defaults to the `background-color` of the element.
 
 #### transitionDuration
 
@@ -70,3 +70,7 @@ Boolean property to set random size of the ripples. Default value is `false`.
 #### randomColor
 
 Boolean property to set random color of the ripples. Default value is `false`.
+
+#### overrideDefaults
+
+Boolean property to override the defaults. Default value is `false`.
