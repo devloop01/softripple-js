@@ -24,25 +24,32 @@ class Ripple {
 		this.rippleWidthMax = 10;
 		this.rippleWidthDefault = 4;
 
-		this.rippleProps = {
-			rippleColor:
-				this.props.rippleColor ||
-				window.getComputedStyle(this.el).getPropertyValue("background-color"),
-			transitionDuration:
-				clampValue(
-					this.props.transitionDuration,
-					this.transitionDurationMin,
-					this.transitionDurationMax
-				) || this.transitionDurationDefault,
-			rippleWidth:
-				clampValue(this.props.rippleWidth, this.rippleWidthMin, this.rippleWidthMax) ||
-				this.rippleWidthDefault,
-			rippleMaxSize:
-				clampValue(this.props.rippleMaxSize, this.rippleSizeMin, this.rippleSizeMax) ||
-				this.rippleSizeDefault,
-			randomSize: this.props.randomSize || false,
-			randomColor: this.props.randomColor || false,
-		};
+		this.overrideDefaults = this.props.overrideDefaults || false;
+
+		if (this.overrideDefaults) this.overrideRipplePropsDefaults();
+		else {
+			this.rippleProps = {
+				rippleColor:
+					this.props.rippleColor ||
+					window.getComputedStyle(this.el).getPropertyValue("background-color"),
+				transitionDuration:
+					clampValue(
+						this.props.transitionDuration,
+						this.transitionDurationMin,
+						this.transitionDurationMax
+					) || this.transitionDurationDefault,
+				rippleWidth:
+					clampValue(this.props.rippleWidth, this.rippleWidthMin, this.rippleWidthMax) ||
+					this.rippleWidthDefault,
+				rippleMaxSize:
+					clampValue(this.props.rippleMaxSize, this.rippleSizeMin, this.rippleSizeMax) ||
+					this.rippleSizeDefault,
+				randomSize: this.props.randomSize || false,
+				randomColor: this.props.randomColor || false,
+			};
+		}
+
+		console.log(this.rippleProps.transitionDuration);
 
 		this.el.style.position = "relative";
 		this.el.style.overflow = "hidden";
@@ -127,6 +134,19 @@ class Ripple {
 			}		
 			`
 		);
+	}
+
+	overrideRipplePropsDefaults() {
+		this.rippleProps = {
+			rippleColor:
+				this.props.rippleColor ||
+				window.getComputedStyle(this.el).getPropertyValue("background-color"),
+			transitionDuration: this.props.transitionDuration || this.transitionDurationDefault,
+			rippleWidth: this.props.rippleWidth || this.rippleWidthDefault,
+			rippleMaxSize: this.props.rippleMaxSize || this.rippleSizeDefault,
+			randomSize: this.props.randomSize || false,
+			randomColor: this.props.randomColor || false,
+		};
 	}
 
 	addListeners() {

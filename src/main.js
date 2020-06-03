@@ -19,6 +19,6 @@ class SoftRipple {
 	}
 }
 
-module.exports = (el, props) => {
-	return new SoftRipple(el, props);
+module.exports = (els, props) => {
+	return new SoftRipple(els, props);
 };

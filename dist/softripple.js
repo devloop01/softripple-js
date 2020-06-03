@@ -137,14 +137,20 @@ var Ripple = function () {
 			this.rippleWidthMax = 10;
 			this.rippleWidthDefault = 4;
 
-			this.rippleProps = {
-				rippleColor: this.props.rippleColor || window.getComputedStyle(this.el).getPropertyValue("background-color"),
-				transitionDuration: (0, _utils.clampValue)(this.props.transitionDuration, this.transitionDurationMin, this.transitionDurationMax) || this.transitionDurationDefault,
-				rippleWidth: (0, _utils.clampValue)(this.props.rippleWidth, this.rippleWidthMin, this.rippleWidthMax) || this.rippleWidthDefault,
-				rippleMaxSize: (0, _utils.clampValue)(this.props.rippleMaxSize, this.rippleSizeMin, this.rippleSizeMax) || this.rippleSizeDefault,
-				randomSize: this.props.randomSize || false,
-				randomColor: this.props.randomColor || false
-			};
+			this.overrideDefaults = this.props.overrideDefaults || false;
+
+			if (this.overrideDefaults) this.overrideRipplePropsDefaults();else {
+				this.rippleProps = {
+					rippleColor: this.props.rippleColor || window.getComputedStyle(this.el).getPropertyValue("background-color"),
+					transitionDuration: (0, _utils.clampValue)(this.props.transitionDuration, this.transitionDurationMin, this.transitionDurationMax) || this.transitionDurationDefault,
+					rippleWidth: (0, _utils.clampValue)(this.props.rippleWidth, this.rippleWidthMin, this.rippleWidthMax) || this.rippleWidthDefault,
+					rippleMaxSize: (0, _utils.clampValue)(this.props.rippleMaxSize, this.rippleSizeMin, this.rippleSizeMax) || this.rippleSizeDefault,
+					randomSize: this.props.randomSize || false,
+					randomColor: this.props.randomColor || false
+				};
+			}
+
+			console.log(this.rippleProps.transitionDuration);
 
 			this.el.style.position = "relative";
 			this.el.style.overflow = "hidden";
@@ -199,6 +205,18 @@ var Ripple = function () {
 			this.style.sheet.insertRule("\n\t\t\t#ripple svg { width: 100%; height: 100%;}\n\t\t");
 
 			this.style.sheet.insertRule("\n\t\t\t@keyframes scale-up {\n\t\t\t\tfrom {\n\t\t\t\t\topacity: 1;\n\t\t\t\t\ttransform: translate(-50%, -50%) scale(0);\n\t\t\t\t}\n\t\t\t\tto {\n\t\t\t\t\topacity: 0;\n\t\t\t\t\ttransform: translate(-50%, -50%) scale(1);\n\t\t\t\t}\n\t\t\t}\t\t\n\t\t\t");
+		}
+	}, {
+		key: "overrideRipplePropsDefaults",
+		value: function overrideRipplePropsDefaults() {
+			this.rippleProps = {
+				rippleColor: this.props.rippleColor || window.getComputedStyle(this.el).getPropertyValue("background-color"),
+				transitionDuration: this.props.transitionDuration || this.transitionDurationDefault,
+				rippleWidth: this.props.rippleWidth || this.rippleWidthDefault,
+				rippleMaxSize: this.props.rippleMaxSize || this.rippleSizeDefault,
+				randomSize: this.props.randomSize || false,
+				randomColor: this.props.randomColor || false
+			};
 		}
 	}, {
 		key: "addListeners",
@@ -266,8 +284,8 @@ var SoftRipple = function () {
 	return SoftRipple;
 }();
 
-module.exports = function (el, props) {
-	return new SoftRipple(el, props);
+module.exports = function (els, props) {
+	return new SoftRipple(els, props);
 };
 
 /***/ }),
