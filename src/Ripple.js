@@ -49,8 +49,6 @@ class Ripple {
 			};
 		}
 
-		console.log(this.rippleProps.transitionDuration);
-
 		this.el.style.position = "relative";
 		this.el.style.overflow = "hidden";
 
@@ -71,6 +69,7 @@ class Ripple {
 		rippleEl.style.top = `${y}px`;
 		rippleEl.style.width = `${rippleSize}px`;
 		rippleEl.style.height = `${rippleSize}px`;
+		rippleEl.style.pointerEvents = "none";
 
 		rippleEl.innerHTML = this.returnCompleteSVG();
 

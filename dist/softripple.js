@@ -150,8 +150,6 @@ var Ripple = function () {
 				};
 			}
 
-			console.log(this.rippleProps.transitionDuration);
-
 			this.el.style.position = "relative";
 			this.el.style.overflow = "hidden";
 
@@ -170,6 +168,7 @@ var Ripple = function () {
 			rippleEl.style.top = y + "px";
 			rippleEl.style.width = rippleSize + "px";
 			rippleEl.style.height = rippleSize + "px";
+			rippleEl.style.pointerEvents = "none";
 
 			rippleEl.innerHTML = this.returnCompleteSVG();
 
