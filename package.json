@@ -1,5 +1,5 @@
 {
-	"name": "soft-ripple-js",
+	"name": "softripple-js",
 	"version": "1.0.0",
 	"description": "A small library to for creating soft ripples",
 	"main": "src/main.js",
