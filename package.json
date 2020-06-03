@@ -12,10 +12,12 @@
 		"url": "git+https://github.com/devloop01/soft-ripple-js.git"
 	},
 	"keywords": [
-		"ripples"
+		"ripples",
+		"library",
+		"interaction"
 	],
 	"author": "Sikriti Dakua",
-	"license": "ISC",
+	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/devloop01/soft-ripple-js/issues"
 	},
