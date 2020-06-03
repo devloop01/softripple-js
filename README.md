@@ -2,7 +2,7 @@
 
 A small Javascript library to create soft ripple interaction
 
-Check the demos: here
+Check the demos: [here](https://codepen.io/dev_loop/full/KKVKqrq)
 
 ## Installation
 
@@ -39,12 +39,12 @@ A String representing the color of the ripple. Defaults to the background color 
 Duration of the transition in seconds. Default is `0.8s`.
 minimum is `0.4` seconds and max is `2` seconds.
 
-#### rippleWidth,
+#### rippleWidth
 
 Width of the ripple. Defaults to `4`.
 minimum is `2` and max is `8`.
 
-#### rippleMaxSize,
+#### rippleMaxSize
 
 Maximum size of the ripple. Defaults to `100`.
 minimum is `50` and max is `200`.
