@@ -56,10 +56,10 @@ class SoftRipple {
 	addRipple(e) {
 		const x = e.x - this.elBox.left;
 		const y = e.y - this.elBox.top;
-		const rippleSize = getRandomIntFromRange(
-			this.rippleSizeMin,
-			this.rippleProps.rippleMaxSize
-		);
+		const rippleSize =
+			this.rippleProps.randomSize != true
+				? this.rippleProps.rippleMaxSize
+				: getRandomIntFromRange(this.rippleSizeMin, this.rippleProps.rippleMaxSize);
 		const rippleEl = document.createElement("div");
 		rippleEl.id = "ripple";
 		rippleEl.style.left = `${x}px`;

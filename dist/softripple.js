@@ -153,7 +153,7 @@ var SoftRipple = function () {
 		value: function addRipple(e) {
 			var x = e.x - this.elBox.left;
 			var y = e.y - this.elBox.top;
-			var rippleSize = (0, _utils.getRandomIntFromRange)(this.rippleSizeMin, this.rippleProps.rippleMaxSize);
+			var rippleSize = this.rippleProps.randomSize != true ? this.rippleProps.rippleMaxSize : (0, _utils.getRandomIntFromRange)(this.rippleSizeMin, this.rippleProps.rippleMaxSize);
 			var rippleEl = document.createElement("div");
 			rippleEl.id = "ripple";
 			rippleEl.style.left = x + "px";
