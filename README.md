@@ -20,23 +20,15 @@ Or load the ES module directly
 
 ## Usage
 
-It's pretty easy to use. Just import the package an declare the SoftRipple class with the element that should have the ripple effect.
+It's pretty easy to use. Just import the package an declare SoftRipple with the element you want the ripple effect to take place.
 
 ```javascript
 const rippleEffect = new SoftRipple(el);
 ```
 
-you can also pass in an array of elements instead of passing a single element.
-
-```javascript
-const el1 = document.querySelector("#el1");
-const el2 = document.querySelector("#el2");
-const rippleEffect = new SoftRipple([el1, el2]);
-```
-
 ## Configuring
 
-To customize the ripple effect you can use the following properties, and then pass in them as an object as the second argument of the constructor.
+To customize the ripple effect you can use the following properties, and then pass them as an object as the second argument of the constructor.
 
 #### rippleColor
 
