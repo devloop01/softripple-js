@@ -1,5 +1,7 @@
 # Soft Ripple
 
+![image](https://i.imgur.com/msl0Lti.gif)
+
 A small Javascript library to create soft ripple interaction
 
 Check the demos: [here](https://codepen.io/dev_loop/full/KKVKqrq)
